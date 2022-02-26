@@ -1,24 +1,13 @@
-/* *, *::after, *::before {
-    box-sizing: border-box;
-} */
-
-/*TEST*/
-/* * {
-    border: solid 1px;
-} */
-
 :root {
     --greenish: #C1C497;
     --light-pink: #EDAFB8;
     --champagne-pink: #F7E1D7;
-    --timberwolf: #DEDBD2;
-    --cambridge-blue: #B0C4B1;
-    --deep-space-sparkle: #4A5759;
     --rosy-brown: #C39198;
     --pale-pink: #F6D7DC;
     --tuscan-red: #75494C;
     --pine-tree: #4D4E2C;
     --dark-sienna: #420101;
+    --lighter-sienna: #5a0f0f;
 }
 
 body {
@@ -43,7 +32,6 @@ header {
     text-align: center;
 }
 footer {
-    /* height: 40px; */
     background-color: rgba(0,0,0,.05);
     padding: 10px;
 }
@@ -85,8 +73,6 @@ a:hover::after {
     box-shadow: 5px 5px #C39198;
     transform: rotateZ(2deg);
 }
-/* .calculator-body:hover {
-} */
 
 .screen {
     text-align: right;
@@ -122,4 +108,58 @@ a:hover::after {
 .buttons button:active {
     transform: none;
     box-shadow: none;
+}
+
+.toggle input {
+    width:0px;
+    height: 0px;
+    opacity: 0;
+}
+
+.toggle {
+    display: inline-block;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    width:34px;
+}
+
+.slider {
+    width:100%;
+    height: 100%;
+    background-color: var(--lighter-sienna);
+    position: absolute;
+    top:0;
+    left:0;
+    transition: .3s;
+}
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    top:2px;
+    left:2px;
+    transition: .3s;
+}
+.toggle input:checked + .slider {
+    background-color: rgba(0,0,0,.3);
+}
+.toggle input:checked + .slider::before {
+    transform: translateX(15px);
+}
+.mute {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.speaker {
+    margin-right:2px;
+    transition: .3s;
+    display: inline-block;
+    width:20px;
+    margin-top: 2px;
+    text-align: left;
 }

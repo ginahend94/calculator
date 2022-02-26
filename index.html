@@ -10,13 +10,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">  
+    <script src="https://kit.fontawesome.com/fc01c3b169.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="wrapper">
         <header>
             <h1>Calculator</h1>
-            <label><input type="checkbox" id="muted" name="muted" /> Mute</label>
+            <div class="mute">
+                <label for="muted"><span class="speaker"><i class="fas fa-volume-up"></i></span></label>
+                <label class="toggle">
+                    <input type="checkbox" id="muted" name="muted" />
+                    <span class="slider"></span>
+                </label>
+            </div>
         </header>
         <div class="container">
             <div class="calculator-body">
