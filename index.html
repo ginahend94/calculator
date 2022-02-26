@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">  
 </head>
 
 <body>
     <div class="wrapper">
         <header>
             <h1>Calculator</h1>
+            <label><input type="checkbox" id="muted" name="muted" /> Mute</label>
         </header>
         <div class="container">
             <div class="calculator-body">
@@ -42,9 +46,11 @@
             </div>
         </div>
         <footer>
-            Created by <a href="https://github.com/ginahend94">Gina Henderson</a>
+            Created by <a href="https://github.com/ginahend94">Gina Henderson</a>.<br />
+            Sounds from <a href="https://zapsplat.com">Zapsplat.com</a>.
         </footer>
     </div>
+    <audio src="sounds/click-down.mp3"></audio>
     <script src="script.js"></script>
 </body>
 
