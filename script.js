@@ -1,7 +1,7 @@
 const button = document.querySelectorAll('button');
 const clickDown = new Audio('sounds/click-down.mp3');
 const clickUp = new Audio('sounds/click-up.mp3');
-const isMuted = document.getElementById('muted').value;
+const mute = document.getElementById('muted');
 
 button.forEach(a=> {
     a.addEventListener('mousedown', playClick);
@@ -9,9 +9,8 @@ button.forEach(a=> {
 });
 
 function playClick(e) {
-    if (isMuted) {
-        console.log(isMuted);
-    };
+    console.log(mute.checked);
+    if (mute.checked) return;
     if (e.type == 'mousedown') clickDown.play();
     else if (e.type == 'mouseup') clickUp.play();
 }
