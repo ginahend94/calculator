@@ -86,6 +86,7 @@ a:hover::after {
     color: var(--pine-tree);
     font-family: 'ZCOOL QingKe HuangYou', cursive;
     font-size: 20px;
+    overflow: hidden;
 }
 
 .buttons {
