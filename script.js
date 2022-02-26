@@ -35,17 +35,36 @@ function playClick(e) {
 }
 
 
-document.querySelectorAll('.num-key').forEach(a => {
-    a.addEventListener('click', logDigit.bind(a))
-})
-
 // Convert button clicks to digits
+const numKey = document.querySelectorAll('.num-key');
+numKey.forEach(a => {
+    a.addEventListener('click', logDigit.bind(a));
+})
 
 let enteredDigits = [];
 
 function logDigit() {
     enteredDigits.push(parseInt(this.innerText));
     console.log(enteredDigits);
+}
+
+const operatorKey = document.querySelectorAll('.operator-key');
+operatorKey.forEach(a => {
+    a.addEventListener('click', logOperator.bind(a));
+})
+
+// Press key, stored in num array
+// Press operator, stored in var
+
+let numbers = [];
+
+let operator = '';
+function logOperator() {
+    operator = this.classList[0];
+    numbers.push(parseInt(enteredDigits.join('')));
+    console.log(operator);
+    console.log(numbers);
+    enteredDigits = [];
 }
 
 // Add, subtract, multiply, divide
@@ -75,10 +94,9 @@ function divide(arr) {
 }
 
 // Operate function takes operator and 2 numbers, calls function on them
-function operate(arr, operator) {
-
-}
-
 // Function populates display on button click
 // Operate: store number, store operator, call function on "="
 // Show answer in display
+
+// Press key, stored in num2 array
+// Press enter, call operate()
