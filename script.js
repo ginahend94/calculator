@@ -36,36 +36,19 @@ function playClick(e) {
 
 
 // Convert button clicks to digits
-const numKey = document.querySelectorAll('.num-key');
-numKey.forEach(a => {
-    a.addEventListener('click', logDigit.bind(a));
-})
 
-let enteredDigits = [];
 
-function logDigit() {
-    enteredDigits.push(parseInt(this.innerText));
-    console.log(enteredDigits);
-}
 
-const operatorKey = document.querySelectorAll('.operator-key');
-operatorKey.forEach(a => {
-    a.addEventListener('click', logOperator.bind(a));
-})
 
 // Press key, stored in num array
 // Press operator, stored in var
 
 let numbers = [];
 
-let operator = '';
-function logOperator() {
-    operator = this.classList[0];
-    numbers.push(parseInt(enteredDigits.join('')));
-    console.log(operator);
-    console.log(numbers);
-    enteredDigits = [];
-}
+
+
+// Press key, stored in num2 array
+// Press enter, call operate()
 
 // Add, subtract, multiply, divide
 
@@ -95,8 +78,58 @@ function divide(arr) {
 
 // Operate function takes operator and 2 numbers, calls function on them
 // Function populates display on button click
-// Operate: store number, store operator, call function on "="
+// Operate: store number, store operator, call function on "=", store in temp on other operation
 // Show answer in display
 
-// Press key, stored in num2 array
-// Press enter, call operate()
+
+
+// Press number key, stored in digit array
+const numKey = document.querySelectorAll('.num-key');
+numKey.forEach(a => {
+    a.addEventListener('click', logDigit.bind(a));
+});
+
+// If digit array includes decimal, return on next decimal press
+const decimal = document.querySelector('.decimal');
+decimal.addEventListener('click', function(e){
+    if (enteredDigits.includes('.')) return;
+    else logDigit(e);
+});
+
+let enteredDigits = [];
+
+function logDigit(e) {
+    enteredDigits.push(e.target.innerText);
+    console.log('entered digits: ' + enteredDigits);
+}
+
+// Press operator key, stored in operator variable
+const operatorKey = document.querySelectorAll('.operator-key');
+operatorKey.forEach(a => {
+    a.addEventListener('click', logOperator.bind(a));
+});
+
+let operator = '';
+
+function logOperator() {
+    operator = this.classList[0];
+    numbers.push(parseInt(enteredDigits.join('')));
+    console.log(operator);
+    console.log(numbers);
+    enteredDigits = [];
+}
+
+// Digit array converted to number, stored in number array
+// Digit array cleared
+// Next digits entered stored in digit array
+// On equals OR next operator, digit array converted to number, stored in number array
+// Show answer in display
+// Digit array cleared
+// Call operate() with number array and operator
+// Save answer in answer variable
+// clear number array
+// If "equals", display answer
+// If "operator", answer is stored in number array
+
+// On clear, clear digit array
+// On all clear, clear digit array and number array
