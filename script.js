@@ -9,13 +9,11 @@ const screen = document.querySelector('.screen');
 mute.addEventListener('change', fadeIcon);
 function fadeIcon() {
     if (mute.checked == true) {
-        console.log('muted');
         speaker.classList.add('fa-volume-mute');
         speaker.classList.remove('fa-volume-up');
         speaker.style = 'color:rgba(0,0,0,.3);'
         muteContainer.setAttribute('title', 'Sound off')
     } else {
-        console.log('unmuted');
         speaker.classList.add('fa-volume-up');
         speaker.classList.remove('fa-volume-mute');
         speaker.style = 'color:inherit;'
@@ -82,7 +80,6 @@ function divide(arr) {
 // Show answer in display
 
 
-
 // Press number key, stored in digit array
 const numKey = document.querySelectorAll('.num-key');
 numKey.forEach(a => {
@@ -98,10 +95,15 @@ decimal.addEventListener('click', function(e){
 
 let enteredDigits = [];
 
+let displayContents = '';
+
 function logDigit(e) {
     enteredDigits.push(e.target.innerText);
+    displayContents += e.target.innerText;
+    screen.innerText = displayContents;
     console.log('entered digits: ' + enteredDigits);
 }
+
 
 // Press operator key, stored in operator variable
 const operatorKey = document.querySelectorAll('.operator-key');
@@ -109,23 +111,29 @@ operatorKey.forEach(a => {
     a.addEventListener('click', logOperator.bind(a));
 });
 
-let operator = '';
+let operator;
 
 function logOperator() {
-    operator = this.classList[0];
-    numbers.push(parseInt(enteredDigits.join('')));
+    operator = this.dataset.operation;
+    document.querySelectorAll('.active-operator').forEach(a=>a.classList.remove('active-operator'));
+    this.classList.add('active-operator');
+    convertToNumber();
     console.log(operator);
-    console.log(numbers);
+// Digit array cleared, next digits entered stored in digit array
     enteredDigits = [];
+    displayContents = '';
 }
 
+function convertToNumber() {
 // Digit array converted to number, stored in number array
-// Digit array cleared
-// Next digits entered stored in digit array
-// On equals OR next operator, digit array converted to number, stored in number array
+    if (enteredDigits.includes('.')) numbers.push(parseFloat(enteredDigits.join('')));
+    else numbers.push(parseInt(enteredDigits.join('')));
+    console.log('numbers: ' + numbers);
+}
+
+// If operator is not undefined, continue
 // Show answer in display
-// Digit array cleared
-// Call operate() with number array and operator
+// On equals OR next operator, call operate() with number array and operator
 // Save answer in answer variable
 // clear number array
 // If "equals", display answer
