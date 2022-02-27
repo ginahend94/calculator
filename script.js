@@ -37,7 +37,6 @@ function playClick(e) {
 
 
 
-
 // Press key, stored in num array
 // Press operator, stored in var
 
@@ -114,6 +113,11 @@ operatorKey.forEach(a => {
 let operator;
 
 function logOperator() {
+    if (!enteredDigits.length) return;
+    if (operator) {
+        operate();
+        clearScreen();
+    }
     operator = this.dataset.operation;
     document.querySelectorAll('.active-operator').forEach(a=>a.classList.remove('active-operator'));
     this.classList.add('active-operator');
@@ -124,20 +128,78 @@ function logOperator() {
     displayContents = '';
 }
 
-function convertToNumber() {
 // Digit array converted to number, stored in number array
+function convertToNumber() {
     if (enteredDigits.includes('.')) numbers.push(parseFloat(enteredDigits.join('')));
     else numbers.push(parseInt(enteredDigits.join('')));
     console.log('numbers: ' + numbers);
 }
 
 // If operator is not undefined, continue
-// Show answer in display
 // On equals OR next operator, call operate() with number array and operator
+const equals = document.querySelector('.equals');
+equals.addEventListener('click', showAnswer);
+
+let answer;
+function operate() {
+    convertToNumber();
 // Save answer in answer variable
+    switch (operator) {
+        case 'plus':
+            answer = add(numbers);
+            break;
+        case 'minus':
+            answer = subtract(numbers);
+            break;
+        case 'times':
+            answer = multiply(numbers);
+            break;
+        case'divide':
+            answer = divide(numbers);
+            break;
+        default:
+            console.log('no operator');
+            return;
+    }
+    enteredDigits = [];
+    document.querySelectorAll('.active-operator').forEach(a=>a.classList.remove('active-operator'));
+    operator = '';
+    numbers = [answer];
+    console.log(numbers);
+    return answer;
+}
+
+// Show answer in display
+function showAnswer() {
+    operate();
+    console.log(answer);
+    displayContents = answer;
+    screen.innerText = displayContents;
+}
+
 // clear number array
 // If "equals", display answer
 // If "operator", answer is stored in number array
 
 // On clear, clear digit array
+
+document.querySelector('.clear').addEventListener('click', clear);
+document.querySelector('.all-clear').addEventListener('click', allClear);
+
+function clearScreen() {
+    displayContents = `​`; // zero-width character
+    screen.innerText = displayContents;
+}
+
+function clear() {
+    enteredDigits = [];
+    clearScreen();
+}
+function allClear() {
+    enteredDigits = [];
+    numbers = [];
+    operator = '';
+    answer = null;
+    clearScreen();
+}
 // On all clear, clear digit array and number array
