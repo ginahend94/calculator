@@ -81,6 +81,7 @@ a:hover::after {
     display: flex;
     justify-content: end;
     text-align: right;
+    height: 25px;
     padding: 5px;
     margin: 10px 0;
     box-shadow: inset 2px 2px  1px rgba(0,0,0,.1);
