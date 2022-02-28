@@ -77,7 +77,7 @@ a:hover::after {
     transform: rotateZ(2deg);
 }
 
-.screen {
+.screen-container {
     display: flex;
     justify-content: end;
     text-align: right;
@@ -91,14 +91,17 @@ a:hover::after {
     font-size: 20px;
     overflow: hidden;
 }
+.screen {
+    max-width: 170px;
+}
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    margin-top: 30px;
+    margin-top: 5px;
 }
-.buttons button {
+button {
     width: 35px;
     height: 25px;
     padding: 5px;
@@ -112,7 +115,7 @@ a:hover::after {
     color: var(--rosy-brown);
     font-family: inherit;
 }
-.buttons button:active {
+button:active {
     transform: none;
     box-shadow: none;
 }
@@ -178,4 +181,33 @@ button.operator-key {
 button.active-operator {
     background-color: var(--active-pink);
     box-shadow: 2px 2px #ddb7a5;
+}
+
+.too-long-popup {
+    font-size: .7em;
+    background-color: var(--champagne-pink);
+    padding: 3px;
+    box-shadow: 3px 3px rgba(0,0,0,.07);
+    top:70px;
+    right:10px;
+    color:var(--rosy-brown);
+    border-radius: 3px;
+    display: none;
+}
+
+.show-popup {
+    display: block;
+}
+
+.secondary-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+.delete {
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

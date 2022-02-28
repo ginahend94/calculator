@@ -1,11 +1,11 @@
-const button = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('button');
 const clickDown = new Audio('sounds/click-down.mp3');
 const clickUp = new Audio('sounds/click-up.mp3');
 const mute = document.getElementById('muted');
 const muteContainer = document.querySelector('.mute');
 const speaker = document.querySelector('.fas');
-const screen = document.querySelector('.screen');
 
+// UI Elements
 mute.addEventListener('change', fadeIcon);
 function fadeIcon() {
     if (mute.checked == true) {
@@ -21,7 +21,7 @@ function fadeIcon() {
     }
 }
 
-button.forEach(a => {
+buttons.forEach(a => {
     a.addEventListener('mousedown', playClick);
     a.addEventListener('mouseup', playClick);
 });
@@ -32,7 +32,7 @@ function playClick(e) {
     else if (e.type == 'mouseup') clickUp.play();
 }
 
-
+/**
 // Convert button clicks to digits
 
 
@@ -203,3 +203,74 @@ function allClear() {
     clearScreen();
 }
 // On all clear, clear digit array and number array
+*/
+
+// CLEAN SLATE
+
+const screen = document.querySelector('.screen');
+let currentNum = '';
+let numbers = [];
+let operator = '';
+let answer = 0; 
+
+
+// Function to take in numbers
+    // turn key presses into digits
+    document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
+    function logDigit(e) {
+    // Include decimal
+        if (e.target.innerText == '.' && currentNum.indexOf('.') >= 0) return;
+    // Cancel if too long    
+        if (screen.offsetWidth >= 170) return showTooLongPopup();
+    // turn digits into numbers
+        currentNum += e.target.innerText;
+    // Display on screen
+        updateScreen(currentNum);
+    }
+    let screenText = '';
+    function updateScreen(text) {
+        screenText = text;
+        screen.innerText = screenText;
+    }
+    function showTooLongPopup() { 
+        document.querySelector('.too-long-popup').classList.add('show-popup');
+        setTimeout(() => {
+            document.querySelector('.too-long-popup').classList.remove('show-popup');
+        }, 1000);
+    }
+    const operatorKeys = document.querySelectorAll('.operator-key');
+// Function to take operator
+    operatorKeys.forEach(a => a.addEventListener('click', setOperator));
+    // turn key press into operation
+    function setOperator(e) {
+        if (!!!currentNum) return;
+        setNumbers();
+        operator = e.target.dataset.operation;
+        console.log(operator);
+        // Highlight active operator
+        operatorKeys.forEach(a => a.classList.remove('active-operator'));
+        e.target.classList.add('active-operator');
+    }
+    function setNumbers() {
+        numbers.push(parseFloat(currentNum));
+        currentNum = '';
+        console.log(numbers)
+    }
+    function clearNumbers() {
+        numbers = [];
+    }
+// Function to calculate from two numbers and operator
+// Function to display answer on screen
+// set answer as new number 1
+// Set up fn keys
+    // % => divide current number by 100
+    // sqrt => math sqrt on current number
+    // delete => slice screen contents
+    document.querySelector('.delete').addEventListener('click', backspace);
+    function backspace() {
+        console.log(currentNum);
+        currentNum = currentNum.slice(0,-1);
+        if (!currentNum) return updateScreen('0');
+        updateScreen(currentNum);
+    }
+    // clear screen
