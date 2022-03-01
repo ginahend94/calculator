@@ -115,7 +115,7 @@ button {
     color: var(--rosy-brown);
     font-family: inherit;
 }
-button:active {
+button:active, .button-active {
     transform: none;
     box-shadow: none;
 }

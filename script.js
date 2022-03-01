@@ -28,8 +28,8 @@ buttons.forEach(a => {
 
 function playClick(e) {
     if (mute.checked) return;
-    if (e.type == 'mousedown') clickDown.play();
-    else if (e.type == 'mouseup') clickUp.play();
+    if (e.type == 'mousedown' || e.type == 'keydown') clickDown.play();
+    else if (e.type == 'mouseup' || e.type == 'keyup') clickUp.play();
 }
 
 // Calculator code
@@ -45,15 +45,20 @@ let answer = 0;
 // turn key presses into digits
 document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
 function logDigit(e) {
+    // Check if equals was pressed, clears numbers
+    if (pressedEquals) {
+        clearNumbers();
+        pressedEquals = false;
+    }
     // Clear highlighted operator on next key press
     removeActiveOperator();
     // Include decimal
-    if (e.target.innerText == '.' && currentNum.indexOf('.') >= 0) return;
+    if (e.target.value == '.' && currentNum.indexOf('.') >= 0) return;
     // Cancel if too long    
     if (screen.offsetWidth >= 170) return showTooLongPopup();
     updateScreen(currentNum);
     // turn digits into numbers
-    currentNum += e.target.innerText;
+    currentNum += e.target.value;
     // Display on screen
     if (currentNum == '.') currentNum = '0.';
     updateScreen(currentNum);
@@ -76,7 +81,7 @@ function setOperator(e) {
     if (!currentNum && currentNum != 0) return;
     setNumbers();
     if (numbers.length >= 2) operate();
-    operator = e.target.dataset.operation;
+    operator = e.target.value;
     // Highlight active operator
     removeActiveOperator();
     e.target.classList.add('active-operator');
@@ -122,22 +127,23 @@ function divide(arr) {
 }
 
 let divideByZero = 0;
+let pressedEquals = false;
 function operate(e) {
     console.log(numbers);//test
     if (numbers.length < 1) return;
     setNumbers();
     if (numbers.length < 2) return;
     switch (operator) {
-        case 'plus':
+        case '+':
             answer = add(numbers);
             break;
-        case 'minus':
+        case '-':
             answer = subtract(numbers);
             break;
-        case 'times':
+        case '*':
             answer = multiply(numbers);
             break;
-        case'divide':
+        case '/':
             if (numbers[1] == 0) {
                 updateScreen('No can do, babes.');
                 ++divideByZero;
@@ -160,7 +166,9 @@ function operate(e) {
     clearNumbers();
     setNumbers();
     currentNum = '';
-    // if (e.target.classList.contains('equals')) console.log('equals babey')
+    if (e.target.value == 'equals') {
+        pressedEquals = true;
+    }
 }
 
 // Set up fn keys
@@ -206,4 +214,38 @@ function allClear() {
     updateScreen('0');
     clearNumbers();
     operator = null;
+}
+
+// Allow keyboard input
+document.addEventListener('keydown', registerKeyboard);
+document.addEventListener('keyup', registerKeyboard);
+function registerKeyboard(e) {
+    // Find corresponding key on calculator
+    const findKey = query => {
+       return Array
+            .from(document.querySelectorAll(query))
+            .find(a => a.value == e.key);
+    }
+    // Number keys
+    if (e.keyCode >= 48 && e.keyCode <= 57 
+        || e.keyCode >= 96 && e.keyCode <= 105) {
+        simulateClick(e, findKey('.num-key'));
+    }
+    // Operation keys
+    const operationKeyCodes = ['+','-','*','/'];
+    if (operationKeyCodes.includes(e.key)) {
+        simulateClick(e, findKey('.operator-key'));
+    }
+    if (e.key == '=' || e.key == 'Enter') {
+        simulateClick(e, document.querySelector('.equals'));
+    }
+}
+function simulateClick(e, target) {
+    if (e.repeat) return;
+    if (e.type == 'keydown') {
+        target.classList.add('button-active');
+    } else if (e.type == 'keyup') {
+        target.classList.remove('button-active');
+    }
+    playClick(e);
 }
