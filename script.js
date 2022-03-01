@@ -47,31 +47,7 @@ let numbers = [];
 // Press key, stored in num2 array
 // Press enter, call operate()
 
-// Add, subtract, multiply, divide
 
-function add(arr) {
-    let x = arr[0];
-    let y = arr[1];
-    return x + y; 
-}
-
-function subtract(arr) {
-    let x = arr[0];
-    let y = arr[1];
-    return x - y;
-}
-
-function multiply(arr) {
-    let x = arr[0];
-    let y = arr[1];
-    return x * y;
-}
-
-function divide(arr) {
-    let x = arr[0];
-    let y = arr[1];
-    return x / y;
-}
 
 // Operate function takes operator and 2 numbers, calls function on them
 // Function populates display on button click
@@ -211,66 +187,138 @@ const screen = document.querySelector('.screen');
 let currentNum = '';
 let numbers = [];
 let operator = '';
-let answer = 0; 
+let answer = 0;
 
 
 // Function to take in numbers
-    // turn key presses into digits
-    document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
-    function logDigit(e) {
+// turn key presses into digits
+document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
+function logDigit(e) {
+    console.log(currentNum);
+    // Clear highlighted operator on next key press
+    removeActiveOperator();
     // Include decimal
-        if (e.target.innerText == '.' && currentNum.indexOf('.') >= 0) return;
+    if (e.target.innerText == '.' && currentNum.indexOf('.') >= 0) return;
     // Cancel if too long    
-        if (screen.offsetWidth >= 170) return showTooLongPopup();
+    if (screen.offsetWidth >= 170) return showTooLongPopup();
     // turn digits into numbers
-        currentNum += e.target.innerText;
+    currentNum += e.target.innerText; 
     // Display on screen
-        updateScreen(currentNum);
-    }
-    let screenText = '';
-    function updateScreen(text) {
-        screenText = text;
-        screen.innerText = screenText;
-    }
-    function showTooLongPopup() { 
-        document.querySelector('.too-long-popup').classList.add('show-popup');
-        setTimeout(() => {
-            document.querySelector('.too-long-popup').classList.remove('show-popup');
-        }, 1000);
-    }
-    const operatorKeys = document.querySelectorAll('.operator-key');
+    if (currentNum == '.') currentNum = '0.';
+    updateScreen(currentNum);
+}
+function updateScreen(text) {
+    let screenText = text;
+    screen.innerText = screenText;
+}
+function showTooLongPopup() {
+    document.querySelector('.too-long-popup').classList.add('show-popup');
+    setTimeout(() => {
+        document.querySelector('.too-long-popup').classList.remove('show-popup');
+    }, 1000);
+}
+const operatorKeys = document.querySelectorAll('.operator-key');
 // Function to take operator
-    operatorKeys.forEach(a => a.addEventListener('click', setOperator));
-    // turn key press into operation
-    function setOperator(e) {
-        if (!!!currentNum) return;
-        setNumbers();
-        operator = e.target.dataset.operation;
-        console.log(operator);
-        // Highlight active operator
-        operatorKeys.forEach(a => a.classList.remove('active-operator'));
-        e.target.classList.add('active-operator');
-    }
-    function setNumbers() {
-        numbers.push(parseFloat(currentNum));
-        currentNum = '';
-        console.log(numbers)
-    }
-    function clearNumbers() {
-        numbers = [];
-    }
+operatorKeys.forEach(a => a.addEventListener('click', setOperator));
+// turn key press into operation
+function setOperator(e) {
+    if (!currentNum) return;
+    setNumbers();
+    if (numbers.length >= 2) operate();
+    operator = e.target.dataset.operation;
+    console.log(operator);
+    // Highlight active operator
+    removeActiveOperator();
+    e.target.classList.add('active-operator');
+}
+function removeActiveOperator() {
+    operatorKeys.forEach(a => a.classList.remove('active-operator'));
+}
+function setNumbers() {
+    //
+    console.log(currentNum);
+    if (!currentNum) return;
+    numbers.push(parseFloat(currentNum));
+    currentNum = '';
+}
+function clearNumbers() {
+    numbers = [];
+}
 // Function to calculate from two numbers and operator
-// Function to display answer on screen
+document.querySelector('.equals').addEventListener('click', operate);
+// Add, subtract, multiply, divide
+
+function add(arr) {
+    let x = arr[0];
+    let y = arr[1];
+    return x + y;
+}
+
+function subtract(arr) {
+    let x = arr[0];
+    let y = arr[1];
+    return x - y;
+}
+
+function multiply(arr) {
+    let x = arr[0];
+    let y = arr[1];
+    return x * y;
+}
+
+function divide(arr) {
+    let x = arr[0];
+    let y = arr[1];
+    return x / y;
+}
+
+function operate() {
+    if (numbers.length < 1) return;
+    setNumbers();
+    switch (operator) {
+        case 'plus':
+            answer = add(numbers);
+            break;
+        case 'minus':
+            answer = subtract(numbers);
+            break;
+        case 'times':
+            answer = multiply(numbers);
+            break;
+        case'divide':
+            answer = divide(numbers);
+            break;
+        default:
+            console.log('no operator');
+            return;
+    }
 // set answer as new number 1
+    currentNum = answer;
+// Function to display answer on screen
+    updateScreen(currentNum);
+    clearNumbers();
+}
+
 // Set up fn keys
     // % => divide current number by 100
     // sqrt => math sqrt on current number
-    // delete => slice screen contents
-    document.querySelector('.delete').addEventListener('click', backspace);
-    function backspace() {
-        console.log(currentNum);
-        currentNum = currentNum.slice(0,-1);
-        if (!currentNum) return updateScreen('0');
-        updateScreen(currentNum);
-    }
-    // clear screen
+// delete => slice screen contents
+document.querySelector('.delete').addEventListener('click', backspace);
+function backspace() {
+    console.log(currentNum);
+    currentNum = currentNum.slice(0, -1);
+    if (!currentNum)  return updateScreen('0');
+    updateScreen(currentNum);
+}
+// clear screen
+document.querySelector('.clear').addEventListener('click', clearScreen);
+document.querySelector('.all-clear').addEventListener('click', allClear);
+function clearScreen() {
+    currentNum = '';
+    updateScreen('0');
+}
+function allClear() {
+    currentNum = '';
+    updateScreen('0');
+    clearNumbers();
+}
