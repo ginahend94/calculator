@@ -194,18 +194,24 @@ let answer = 0;
 // turn key presses into digits
 document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
 function logDigit(e) {
-    console.log(currentNum);
+    console.log('(logDigit) the current number is \'' + currentNum + '\'');
     // Clear highlighted operator on next key press
     removeActiveOperator();
     // Include decimal
     if (e.target.innerText == '.' && currentNum.indexOf('.') >= 0) return;
     // Cancel if too long    
     if (screen.offsetWidth >= 170) return showTooLongPopup();
+    console.log('updating screen...');
+    updateScreen(currentNum);
     // turn digits into numbers
+    console.log(currentNum);
     currentNum += e.target.innerText; 
+    console.log(currentNum);
     // Display on screen
     if (currentNum == '.') currentNum = '0.';
+    console.log('updating screen AGAIN...');
     updateScreen(currentNum);
+    console.log('(logDigit) the current number is \'' + currentNum + '\''); //test
 }
 function updateScreen(text) {
     let screenText = text;
@@ -222,6 +228,7 @@ const operatorKeys = document.querySelectorAll('.operator-key');
 operatorKeys.forEach(a => a.addEventListener('click', setOperator));
 // turn key press into operation
 function setOperator(e) {
+    console.log('setting operator'); //test
     if (!currentNum) return;
     setNumbers();
     if (numbers.length >= 2) operate();
@@ -235,11 +242,11 @@ function removeActiveOperator() {
     operatorKeys.forEach(a => a.classList.remove('active-operator'));
 }
 function setNumbers() {
-    //
-    console.log(currentNum);
+    console.log('setnumbers: the current num is \'' + currentNum + '\'');
     if (!currentNum) return;
     numbers.push(parseFloat(currentNum));
     currentNum = '';
+    console.log('setnumbers: the current num is now \'' + currentNum + '\'');
 }
 function clearNumbers() {
     numbers = [];
@@ -297,6 +304,8 @@ function operate() {
 // Function to display answer on screen
     updateScreen(currentNum);
     clearNumbers();
+    setNumbers();
+    currentNum = '';
 }
 
 // Set up fn keys
@@ -305,7 +314,6 @@ function operate() {
 // delete => slice screen contents
 document.querySelector('.delete').addEventListener('click', backspace);
 function backspace() {
-    console.log(currentNum);
     currentNum = currentNum.slice(0, -1);
     if (!currentNum)  return updateScreen('0');
     updateScreen(currentNum);
