@@ -73,7 +73,7 @@ const operatorKeys = document.querySelectorAll('.operator-key');
 operatorKeys.forEach(a => a.addEventListener('click', setOperator));
 // turn key press into operation
 function setOperator(e) {
-    if (!currentNum) return;
+    if (!currentNum && currentNum != 0) return;
     setNumbers();
     if (numbers.length >= 2) operate();
     operator = e.target.dataset.operation;
@@ -85,7 +85,8 @@ function removeActiveOperator() {
     operatorKeys.forEach(a => a.classList.remove('active-operator'));
 }
 function setNumbers() {
-    if (!currentNum) return;
+    if (!currentNum && currentNum != 0) return;
+    console.log(currentNum);
     numbers.push(parseFloat(currentNum));
     currentNum = '';
 }
@@ -120,7 +121,9 @@ function divide(arr) {
     return x / y;
 }
 
-function operate() {
+let divideByZero = 0;
+function operate(e) {
+    console.log(numbers);//test
     if (numbers.length < 1) return;
     setNumbers();
     if (numbers.length < 2) return;
@@ -135,6 +138,15 @@ function operate() {
             answer = multiply(numbers);
             break;
         case'divide':
+            if (numbers[1] == 0) {
+                updateScreen('No can do, babes.');
+                ++divideByZero;
+                if (divideByZero >= 3) {
+                    updateScreen('Seriously? Come on, pal.');
+                }
+                if (divideByZero == 42) updateScreen('Persistent, aren\'t we?');
+                return allClear();
+            }
             answer = divide(numbers);
             break;
         default:
@@ -148,19 +160,41 @@ function operate() {
     clearNumbers();
     setNumbers();
     currentNum = '';
+    // if (e.target.classList.contains('equals')) console.log('equals babey')
 }
 
 // Set up fn keys
     // % => divide current number by 100
+document.querySelector('.percent').addEventListener('click', percent);
+function percent() {
+    if (!currentNum) return;
+    currentNum /= 100;
+    console.log(currentNum);
+    updateScreen(currentNum);
+}
     // sqrt => math sqrt on current number
-// delete => slice screen contents
+document.querySelector('.sqrt').addEventListener('click', sqrt);
+function sqrt() {
+    if (!currentNum) return;
+    currentNum = Math.sqrt(currentNum);
+    console.log(currentNum);
+    updateScreen(currentNum);
+}
+    //pi 
+document.querySelector('.pi').addEventListener('click', pi);
+function pi() {
+    currentNum = Math.PI;
+    updateScreen(currentNum);
+}
+
+    // delete => slice screen contents
 document.querySelector('.delete').addEventListener('click', backspace);
 function backspace() {
     currentNum = currentNum.slice(0, -1);
     if (!currentNum)  return updateScreen('0');
     updateScreen(currentNum);
 }
-// clear screen
+    // clear screen
 document.querySelector('.clear').addEventListener('click', clearScreen);
 document.querySelector('.all-clear').addEventListener('click', allClear);
 function clearScreen() {
@@ -171,4 +205,5 @@ function allClear() {
     currentNum = '';
     updateScreen('0');
     clearNumbers();
+    operator = null;
 }
