@@ -280,8 +280,12 @@ function divide(arr) {
 }
 
 function operate() {
+    console.log(numbers);//test
+    console.log(numbers.length);//test
     if (numbers.length < 1) return;
     setNumbers();
+    if (numbers.length < 2) return;
+    console.log(numbers);
     switch (operator) {
         case 'plus':
             answer = add(numbers);
@@ -300,6 +304,7 @@ function operate() {
             return;
     }
 // set answer as new number 1
+console.log('setting currentnum to answer');//test
     currentNum = answer;
 // Function to display answer on screen
     updateScreen(currentNum);
