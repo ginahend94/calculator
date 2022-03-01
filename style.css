@@ -7,7 +7,7 @@
     --rosy-brown: #C39198;
     --pale-pink: #F6D7DC;
     --tuscan-red: #75494C;
-    --pine-tree: #4D4E2C;
+    --pine-tree: #5e5f3b;
     --dark-sienna: #420101;
     --lighter-sienna: #5a0f0f;
 }
@@ -210,4 +210,5 @@ button.active-operator {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 2px;
 }
