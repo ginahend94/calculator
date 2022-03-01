@@ -280,3 +280,11 @@ function simulateClick(e, target) {
     }
     playClick(e);
 }
+
+// Modal
+document.querySelector('.modal-bg').addEventListener('click', modal);
+document.querySelector('.fa-question-circle').addEventListener('click', modal);
+document.querySelector('.close').addEventListener('click', modal);
+function modal() {
+    document.querySelector('.modal').classList.toggle('modal-closed');
+}

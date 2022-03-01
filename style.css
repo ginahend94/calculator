@@ -36,6 +36,8 @@ header {
 footer {
     background-color: rgba(0,0,0,.05);
     padding: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 a, a:active {
@@ -211,4 +213,56 @@ button.active-operator {
     justify-content: center;
     align-items: center;
     margin-bottom: 2px;
+}
+
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    border: solid 2px black;
+}
+.modal-bg {
+    position: fixed;
+    top:0;
+    width: 0;
+    background-color: rgba(0,0,0,.3);
+    height: 100vh;
+    width: 100vw;
+}
+.modal-inner {
+    position: relative;
+    z-index: 999999;
+    background-color: var(--champagne-pink);
+    margin: auto;
+    max-width:450px;
+    padding: 20px;
+}
+.socials {
+    display: flex;
+    justify-content: center;
+}
+.socials a {
+    margin:20px;
+}
+.close {
+    position: absolute;
+    top:10px;
+    right:20px;
+    font-size: 2em;
+    font-weight: 900;
+    transition: ease .1s;
+}
+.close:hover, .fa-question-circle:hover {
+    cursor: pointer;
+    opacity: .8;
+}
+.close:active, .fa-question-circle:active {
+    opacity: 1;
+}
+.modal-closed {
+    display: none;
 }
