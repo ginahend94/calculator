@@ -46,7 +46,7 @@ let answer = 0;
 document.querySelectorAll('.num-key').forEach(a => a.addEventListener('click', logDigit));
 function logDigit(e) {
     // Check if equals was pressed, clears numbers
-    if (pressedEquals) {
+    if (pressedEquals && !operator) {
         clearNumbers();
         pressedEquals = false;
     }
@@ -73,15 +73,17 @@ function showTooLongPopup() {
         document.querySelector('.too-long-popup').classList.remove('show-popup');
     }, 1000);
 }
-const operatorKeys = document.querySelectorAll('.operator-key');
+
 // Function to take operator
+const operatorKeys = document.querySelectorAll('.operator-key');
 operatorKeys.forEach(a => a.addEventListener('click', setOperator));
+
 // turn key press into operation
 function setOperator(e) {
-    if (!currentNum && currentNum != '0') return;
+    if (!currentNum && currentNum != '0' && !numbers.length) return;
     setNumbers();
     // Find answer, then set new operator
-    if (numbers.length >= 2) operate();
+    if (numbers.length >= 2) operate(e);
     operator = e.target.value;
     // Highlight active operator
     removeActiveOperator();
@@ -128,6 +130,7 @@ function divide(arr) {
 
 let divideByZero = 0;
 let pressedEquals = false;
+
 function operate(e) {
     if (numbers.length < 1) return;
     setNumbers();
@@ -165,8 +168,9 @@ function operate(e) {
     clearNumbers();
     setNumbers();
     currentNum = '';
-    if (e && e.target.value == 'equals') {
+    if (e.target.value == 'equals') {
         pressedEquals = true;
+        operator = null;
     }
 }
 
@@ -202,6 +206,7 @@ function backspace() {
     // clear screen
 document.querySelector('.clear').addEventListener('click', clearScreen);
 document.querySelector('.all-clear').addEventListener('click', allClear);
+
 function clearScreen() {
     currentNum = '';
     updateScreen('0');
@@ -217,6 +222,7 @@ function allClear() {
 // Allow keyboard input
 document.addEventListener('keydown', registerKeyboard);
 document.addEventListener('keyup', registerKeyboard);
+
 function registerKeyboard(e) {
     // Find corresponding key on calculator
     const findKey = query => {
@@ -227,15 +233,42 @@ function registerKeyboard(e) {
     // Number keys
     if (e.keyCode >= 48 && e.keyCode <= 57 
         || e.keyCode >= 96 && e.keyCode <= 105) {
-        simulateClick(e, findKey('.num-key'));
+            if (e.repeat) return; // Prevent press-and-hold spamming
+            const target = findKey('.num-key');
+            const event = {type: 'keydown', target};
+            simulateClick(e, target);
+            if (e.type == 'keyup') return;
+            logDigit(event);
     }
     // Operation keys
     const operationKeyCodes = ['+','-','*','/'];
     if (operationKeyCodes.includes(e.key)) {
-        simulateClick(e, findKey('.operator-key'));
+        if (e.repeat) return;
+        const target = findKey('.operator-key');
+        const event = {type:'keydown', target};
+        simulateClick(e, target);
+        if (e.type == 'keyup') return;
+        setOperator(event);
     }
     if (e.key == '=' || e.key == 'Enter') {
-        simulateClick(e, document.querySelector('.equals'));
+        if (e.repeat) return;
+        const equals = document.querySelector('.equals');
+        const event = {type:'keydown', target:equals};
+        simulateClick(e, equals);
+        if (e.type == 'keyup') return;
+        operate(event);
+    }
+    if (e.key == 'Backspace') {
+        if (e.repeat) return;
+        simulateClick(e, document.querySelector('.delete'));
+        if (e.type == 'keyup') return;
+        backspace();
+    }
+    if (e.key == 'Escape') {
+        if (e.repeat) return;
+        simulateClick(e, document.querySelector('.all-clear'));
+        if (e.type == 'keyup') return;
+        allClear();
     }
 }
 function simulateClick(e, target) {
