@@ -78,8 +78,9 @@ const operatorKeys = document.querySelectorAll('.operator-key');
 operatorKeys.forEach(a => a.addEventListener('click', setOperator));
 // turn key press into operation
 function setOperator(e) {
-    if (!currentNum && currentNum != 0) return;
+    if (!currentNum && currentNum != '0') return;
     setNumbers();
+    // Find answer, then set new operator
     if (numbers.length >= 2) operate();
     operator = e.target.value;
     // Highlight active operator
@@ -90,8 +91,7 @@ function removeActiveOperator() {
     operatorKeys.forEach(a => a.classList.remove('active-operator'));
 }
 function setNumbers() {
-    if (!currentNum && currentNum != 0) return;
-    console.log(currentNum);
+    if (!currentNum && currentNum != '0') return;
     numbers.push(parseFloat(currentNum));
     currentNum = '';
 }
@@ -99,8 +99,8 @@ function clearNumbers() {
     numbers = [];
 }
 // Function to calculate from two numbers and operator
-document.querySelector('.equals').addEventListener('click', operate);
 // Add, subtract, multiply, divide
+document.querySelector('.equals').addEventListener('click', operate);
 
 function add(arr) {
     let x = arr[0];
@@ -129,7 +129,6 @@ function divide(arr) {
 let divideByZero = 0;
 let pressedEquals = false;
 function operate(e) {
-    console.log(numbers);//test
     if (numbers.length < 1) return;
     setNumbers();
     if (numbers.length < 2) return;
@@ -146,12 +145,12 @@ function operate(e) {
         case '/':
             if (numbers[1] == 0) {
                 updateScreen('No can do, babes.');
-                ++divideByZero;
+                divideByZero++;
                 if (divideByZero >= 3) {
                     updateScreen('Seriously? Come on, pal.');
                 }
                 if (divideByZero == 42) updateScreen('Persistent, aren\'t we?');
-                return allClear();
+                return setTimeout(allClear, 1000);
             }
             answer = divide(numbers);
             break;
@@ -166,7 +165,7 @@ function operate(e) {
     clearNumbers();
     setNumbers();
     currentNum = '';
-    if (e.target.value == 'equals') {
+    if (e && e.target.value == 'equals') {
         pressedEquals = true;
     }
 }
@@ -177,7 +176,6 @@ document.querySelector('.percent').addEventListener('click', percent);
 function percent() {
     if (!currentNum) return;
     currentNum /= 100;
-    console.log(currentNum);
     updateScreen(currentNum);
 }
     // sqrt => math sqrt on current number
@@ -185,7 +183,6 @@ document.querySelector('.sqrt').addEventListener('click', sqrt);
 function sqrt() {
     if (!currentNum) return;
     currentNum = Math.sqrt(currentNum);
-    console.log(currentNum);
     updateScreen(currentNum);
 }
     //pi 
@@ -214,6 +211,7 @@ function allClear() {
     updateScreen('0');
     clearNumbers();
     operator = null;
+    removeActiveOperator();
 }
 
 // Allow keyboard input
